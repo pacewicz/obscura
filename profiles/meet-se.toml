@@ -1,8 +1,9 @@
 # OBSBOT Meet SE (3564:fefe).
 #
-# UNVERIFIED and deliberately partial: no USB captures or independent
-# implementation exist for this model. Non-gimbal bindings below are
-# copied from tiny-se.toml: OBSBOT's own SDK (bundled in
+# Partly verified (firmware 4.6.4.1, OBSBOT Center usbmon captures): Auto
+# Framing, Field of View, waking from sleep and the mic-during-sleep bytes, see
+# below. Everything else is unverified and deliberately partial. Non-gimbal
+# bindings below are copied from tiny-se.toml: OBSBOT's own SDK (bundled in
 # https://github.com/aaronsb/obsbot-camera-control) groups Meet SE with
 # Tiny, Tiny 4K, Tiny 2 (+ Lite) and Tiny SE under one status-block struct
 # internally (a *different* struct than plain Meet/Meet 4K use), and

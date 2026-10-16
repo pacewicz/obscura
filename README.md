@@ -45,7 +45,7 @@ using a vendor protocol reverse-engineered from USB captures.
 | OBSBOT Tiny 2 Lite | `3564:fef9` | Assumed supported, unverified (see below) |
 | OBSBOT Tiny 4K | `3564:fef4` | Assumed supported, unverified (see below) |
 | OBSBOT Meet 2 | `3564:fefb` | Assumed supported minus gimbal features, unverified (see below) |
-| OBSBOT Meet SE | `3564:fefe` | Assumed supported minus gimbal features, unverified (see below) |
+| OBSBOT Meet SE | `3564:fefe` | Partly verified on firmware 4.6.4.1: Auto Framing, Field of View, wake from sleep (see below) |
 | Other OBSBOT models | `3564:*` | Standard UVC controls only (see below) |
 | Any other UVC webcam | – | Standard UVC controls, with `--all` / `OBSBOT_ALL_CAMERAS=1` |
 
@@ -68,6 +68,14 @@ so gimbal velocity, presets and gimbal reset/reverse are left unbound for
 them rather than guessed. If something doesn't work, or you can capture
 one of these models' traffic, see
 [Adding support for another camera](#adding-support-for-another-camera).
+
+**Meet SE (firmware 4.6.4.1) so far:** Auto Framing (the palm-up gesture and
+its Composition Mode) and Field of View are captured from OBSBOT Center and
+verified with readback; waking the camera from sleep works; the Microphone Status During
+Sleep bytes match the capture. The Tiny SE gesture switches (Locked Target and
+the master switch) did not stop the palm gesture on the Meet SE, and manual
+zoom is unavailable (the app zooms with a digital crop that is not bound yet).
+Everything else still reuses the Tiny SE bindings and is unverified.
 
 ## Features
 
