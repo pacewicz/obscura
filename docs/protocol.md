@@ -111,7 +111,9 @@ the gesture switches that were on; unlocking restores the AI mode only.
 | Auto Exposure Mode | `03 01 v` | [7] | 0 Global, 1 Face |
 | Noise Reduction | `0a 01 v` | [8] | 0 Off, 1 Weak, 2 Medium, 3 Strong |
 | Auto Sleep + Sleep Time | `0b 02 t` (i16 seconds) | [10..12] i16 | 30 / 120 / 600; negated (−30) when Auto Sleep is off |
-| Sleep Background Mirror | `0e 02 02 v` | [29] | 0/1 |
+| Sleep Background: select image slot (Meet SE) | `0e 02 00 n` | [27] = selected slot | n = slot; OBSBOT Center's middle tile is slot 1, right tile slot 3. Selecting an empty slot gives a black sleep picture |
+| Sleep Background: **delete** image slot (Meet SE) | `0e 02 01 n` | [26] bit n cleared; [27] falls back to 0 if n was selected | ⚠ destructive: the image is gone from the camera and a factory reset does not restore it |
+| Sleep Background Mirror | `0e 02 02 v` | [29] | 0/1 ✅ (Meet SE: the `02` is the mirror sub-command, it does not select a background) |
 | Mic Status During Sleep | `13 01 v` | [16] | 0/1 |
 | Auto Gain | `17 01 v` | [25] | 0/1 |
 | Status Light | `1a 01 v` | [33] | 0 off, 1–3 brightness |
@@ -129,5 +131,45 @@ Status block bytes seen changing: [1] locked target, [2] asleep, [4] and
 [17] tracking state, [6] HDR, [7] AE mode, [8] noise reduction, [9] device
 state (1 awake, 3 asleep), [10..12] sleep time, [13] AF mode, [14] AF on,
 [15] focus, [16] mic during sleep, [19] mirror, [24] AI mode, [25] auto gain,
+[26] sleep background slots holding an image (bit n = slot n, Meet SE), [27] selected sleep background slot,
 [29] sleep background mirror, [31] 0x3c/0x1e (changes with [9]), [33] status
 light, [34] microphone flags.
+
+## Meet SE: sleep background upload (selector 5), factory reset, manual exposure
+
+Seen in OBSBOT Center captures on a Meet SE, firmware 4.6.4.1; not sent from
+Linux.
+
+**Sleep background upload** goes over XU unit 2 **selector 5**, 60-byte
+SET_CUR packets. OBSBOT Center crops the picture to 16:9 and re-encodes it
+as a 1536x864 baseline JPEG first.
+
+```
+01 00 ...                                   begin
+00 [size u32 LE] 33 00 "/app/private/maskN.jpg" 00...   header: JPEG size, chunk size 0x33, target file (N = slot)
+04 [seq u32 LE, from 1] [2-byte check] [n] 00 [n data bytes, n <= 51]   one per chunk
+01 00 ...                                   end
+```
+
+The JPEG reassembles byte for byte from the chunks. The 2-byte check is not
+CRC-16/USB, CCITT, ARC or MODBUS over the data or the header, so uploads
+can't be generated yet. Between packets the app polls selector 5 with
+GET_CUR / GET_INFO / GET_DEF (1 byte, 0 or 3). Afterwards [26] gains bit N
+and [27] = N (the new image is selected).
+
+**Factory reset**: framed dst 02 `02a8`, payload `01`. The camera
+re-enumerates (new USB address) about 15 s later, with Auto Framing on
+(Upper Body), HDR off, noise reduction Weak, radio distance Close, status
+light 3 and mic during sleep off. It did not bring back a deleted sleep
+background image.
+
+**Manual exposure** in OBSBOT Center: Auto Exposure off is dst 02 `4224`
+and `4229` with payload `01000000`, then `8229` `01` + u32 shutter time in
+100 µs units (100 = 1/100 s, 125 = 1/80, 4 = 1/2500), the same unit as the
+UVC exposure control. ISO is UVC gain x100 (gain 47 = ISO 4700). Auto
+Exposure on is `8229` payload `02 01000000`. obscura's UVC exposure and
+gain controls cover this.
+
+**High-fps Recording and Slow Motion** (Console tab) sent nothing to the
+camera in the capture. The 1920x1080 100 fps and 1280x720 150/120 fps MJPEG
+formats are ordinary UVC formats and deliver full rate from Linux.

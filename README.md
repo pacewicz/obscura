@@ -107,7 +107,7 @@ Status on the Tiny SE:
 | Preview | Live MJPEG preview, 1080p/720p at 30/60 fps | ✅ |
 | Device | Hot-plug and reboot recovery | ✅ |
 | Panel | Tray indicator with quick toggles and show/hide | ✅ |
-| Pending captures | Custom sleep background, factory reset | 🚧 greyed out |
+| Pending captures | Custom sleep background (Meet SE: upload captured, its chunk checksum unknown, see docs/protocol.md), factory reset (command known, not exposed) | 🚧 greyed out |
 | Out of scope | Beauty/background effects, portrait mode, rotate/flip, recording, firmware updates | ❌ ¹ |
 
 ¹ In OBSBOT Center these effects (and portrait mode, rotate and flip) run on

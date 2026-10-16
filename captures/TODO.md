@@ -24,7 +24,6 @@ PC, and we'll do the same in the app.
 | What | Why |
 |---|---|
 | `23-ai-hand-dropdown` NOTES entry | Still needed: the dropdown's option names, in the order picked, and which was selected at the start. Values are dst 04 `4422` u8 and `18 01 v`. |
-| `51b-sleep-background` (new, short) | In `51-device-sleep`, choosing a black or default Sleep Background sent nothing I could see. Redo just that: black → default → black → default, about 5 s apart, and note whether the picker changed in the app. |
 | Disable Microphone: which way round? | Your 9/26 screenshot shows the toggle **on**. Sending `1c 01 01` made the camera re-enumerate and set status bit 0x10. The app assumes 1 = microphone disabled; a note on what the toggle looked like before and after would confirm it. |
 | `46-autoexposure` manual sliders | Optional. With AE off I only saw `4224` and two `8229` writes and no "AE on" at the end, so the manual sliders may not have been exercised. The app already does manual exposure over UVC, so only redo this if you want parity with OBSBOT Center's sliders. |
 
