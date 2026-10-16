@@ -136,10 +136,10 @@ features! {
 
     // Audio
     MicDuringSleep        "mic_during_sleep" => "audio", "Microphone Status During Sleep", FeatureKind::Toggle;
-    NoiseReduction        "noise_reduction" => "audio", "Noise Reduction", choice(&[(0, "Off"), (1, "Low"), (2, "Medium"), (3, "High")]);
+    NoiseReduction        "noise_reduction" => "audio", "Noise Reduction", choice(&[(0, "Off"), (1, "Weak"), (2, "Medium"), (3, "Strong")]);
     AutoGain              "auto_gain" => "audio", "Auto Gain", FeatureKind::Toggle;
     DisableMicrophone     "disable_microphone" => "audio", "Disable Microphone", FeatureKind::Toggle;
-    PickupDistance        "pickup_distance" => "audio", "Radio Distance", choice(&[(0, "Close"), (1, "Medium"), (2, "Far")]);
+    PickupDistance        "pickup_distance" => "audio", "Radio Distance", choice(&[(0, "Close"), (1, "Standard"), (2, "Far")]);
 
     // Device sleep
     AutoSleep             "auto_sleep" => "sleep", "Auto Sleep", FeatureKind::Toggle;

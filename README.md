@@ -45,7 +45,7 @@ using a vendor protocol reverse-engineered from USB captures.
 | OBSBOT Tiny 2 Lite | `3564:fef9` | Assumed supported, unverified (see below) |
 | OBSBOT Tiny 4K | `3564:fef4` | Assumed supported, unverified (see below) |
 | OBSBOT Meet 2 | `3564:fefb` | Assumed supported minus gimbal features, unverified (see below) |
-| OBSBOT Meet SE | `3564:fefe` | Partly verified on firmware 4.6.4.1: Auto Framing, Field of View, wake from sleep (see below) |
+| OBSBOT Meet SE | `3564:fefe` | Partly verified on firmware 4.6.4.1: Auto Framing, Field of View, image and audio settings, wake from sleep (see below) |
 | Other OBSBOT models | `3564:*` | Standard UVC controls only (see below) |
 | Any other UVC webcam | – | Standard UVC controls, with `--all` / `OBSBOT_ALL_CAMERAS=1` |
 
@@ -72,7 +72,11 @@ one of these models' traffic, see
 **Meet SE (firmware 4.6.4.1) so far:** Auto Framing (the palm-up gesture), its
 Composition Mode, the gesture Zoom with its Zoom Factor, and Field of View are
 captured from OBSBOT Center and verified with readback; waking the camera
-from sleep works; the Microphone Status During Sleep bytes match the capture.
+from sleep works; HDR, Mirror Image, the audio settings (Mic Status During
+Sleep, Noise Reduction, Auto Gain, Disable Microphone, Radio Distance), Auto
+Sleep / Sleep Time and the Status Light match the captures or were read back
+from Linux. High-fps Recording needs no vendor command on Linux: pick the
+1920x1080 100 fps or 1280x720 150/120 fps MJPEG format in the recording app.
 The Tiny SE gesture switches (Locked Target, the master switch, Dynamic Zoom,
 Direction Flip) did not stop the palm gesture and the app has no such
 controls, so they are not bound. Manual zoom is unavailable (the app zooms

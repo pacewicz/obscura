@@ -1,9 +1,10 @@
 # OBSBOT Meet SE (3564:fefe).
 #
 # Partly verified (firmware 4.6.4.1, OBSBOT Center usbmon captures): Auto
-# Framing, Field of View, waking from sleep and the mic-during-sleep bytes, see
-# below. Everything else is unverified and deliberately partial. Non-gimbal
-# bindings below are copied from tiny-se.toml: OBSBOT's own SDK (bundled in
+# Framing, Field of View, waking from sleep, HDR, mirror image, the audio
+# settings, sleep time and the status light, see below. Everything else is
+# unverified and deliberately partial. Non-gimbal bindings below are copied
+# from tiny-se.toml: OBSBOT's own SDK (bundled in
 # https://github.com/aaronsb/obsbot-camera-control) groups Meet SE with
 # Tiny, Tiny 4K, Tiny 2 (+ Lite) and Tiny SE under one status-block struct
 # internally (a *different* struct than plain Meet/Meet 4K use), and
@@ -91,7 +92,11 @@ v4l2 = 0x0098091c
 offset = 9
 scale = 3
 
-# Audio
+# Audio. Mic during sleep, Noise Reduction (0 Off, 1 Weak, 2 Medium,
+# 3 Strong) and Radio Distance (0 Close, 1 Standard, 2 Far) match OBSBOT
+# Center captures, status bytes included. Auto Gain and Disable Microphone
+# were written and read back from Linux; disabling the microphone drops the
+# camera's USB audio interface, enabling it brings it back.
 [features.mic_during_sleep]
 status = 16
 short = { id = 0x13 }

@@ -109,13 +109,13 @@ the gesture switches that were on; unlocking restores the AI mode only.
 | ? (hand dropdown) | `18 01 v` | | *pending* |
 | HDR | `01 01 v` | [6] | 0/1 |
 | Auto Exposure Mode | `03 01 v` | [7] | 0 Global, 1 Face |
-| Noise Reduction | `0a 01 v` | [8] | 0 Off, 1–3 (labels pending) |
+| Noise Reduction | `0a 01 v` | [8] | 0 Off, 1 Weak, 2 Medium, 3 Strong |
 | Auto Sleep + Sleep Time | `0b 02 t` (i16 seconds) | [10..12] i16 | 30 / 120 / 600; negated (−30) when Auto Sleep is off |
 | Sleep Background Mirror | `0e 02 02 v` | [29] | 0/1 |
 | Mic Status During Sleep | `13 01 v` | [16] | 0/1 |
 | Auto Gain | `17 01 v` | [25] | 0/1 |
 | Status Light | `1a 01 v` | [33] | 0 off, 1–3 brightness |
-| Radio Distance | `1b 01 v` | [34] low bits | 0 Close, 1–2 (labels pending) |
+| Radio Distance | `1b 01 v` | [34] low bits | 0 Close, 1 Standard, 2 Far |
 | Microphone enabled (OBSBOT Center: "Disable Microphone", inverted) | `1c 01 v` | [34] bit 4 (0x10) | 1 enabled, 0 disabled ✅; the camera re-enumerates on USB, without its audio interface when disabled |
 
 ## Standard UVC controls used by OBSBOT Center
