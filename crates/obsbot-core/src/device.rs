@@ -275,10 +275,14 @@ impl Device {
     /// Reads a vendor setting's raw value from the status block.
     fn status_value(b: &VendorBinding, block: &[u8]) -> Option<i64> {
         let v = protocol::decode_status(block, b.status?, b.status_value)?;
-        Some(match b.status_mask {
+        let v = match b.status_mask {
             Some(m) => ((v as u8 & m) >> m.trailing_zeros()) as i64,
             None => v,
-        })
+        };
+        if b.status_map.is_empty() {
+            return Some(v);
+        }
+        b.status_map.iter().find(|m| m[0] == v).map(|m| m[1])
     }
 
     /// The last level seen for a switch/level setting.
@@ -430,6 +434,7 @@ impl Device {
         if let Some(s) = &b.short {
             let mut payload = s.prefix.clone();
             payload.extend(encode_value(s.value, value, 1));
+            payload.extend(&s.suffix);
             let packet = encode_short(s.id, &payload);
             uvc_xu::set(&self.node, protocol::XU_UNIT, protocol::SEL_STATUS, &packet)?;
         }
@@ -606,5 +611,35 @@ fn validate(kind: &FeatureKind, value: i64) -> Result<()> {
         Ok(())
     } else {
         Err(Error::OutOfRange { value, min, max })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Status blocks and writes from OBSBOT Center / obsbotctl on a Meet SE (fw 4.6.4.1).
+    #[test]
+    fn meet_se_status_readback_matches_captures() {
+        let p = DeviceProfile::for_usb(0x3564, 0xfefe);
+        let read = |id: FeatureId, offset: usize, byte: u8| {
+            let Binding::Vendor(b) = &p.features[&id] else {
+                panic!("{id:?} is a vendor feature")
+            };
+            let mut block = [0u8; 60];
+            block[offset] = byte;
+            Device::status_value(b, &block)
+        };
+        // Auto Framing, status byte 38: Off, Group, Single Close-up, Upper Body.
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x8a), Some(256));
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x89), Some(1));
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x8b), Some(257));
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x8d), Some(513));
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x84), Some(256)); // off, Upper Body
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x80), Some(256)); // off, Group
+        assert_eq!(read(FeatureId::AutoFraming, 38, 0x87), None); // mode 3: never seen
+                                                                  // Field of View, status byte 4: bit 2 is the digital-zoom flag.
+        assert_eq!(read(FeatureId::Fov, 4, 0x01), Some(1));
+        assert_eq!(read(FeatureId::Fov, 4, 0x06), Some(2));
     }
 }

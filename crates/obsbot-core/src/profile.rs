@@ -151,6 +151,9 @@ pub struct ShortSpec {
     pub prefix: Vec<u8>,
     #[serde(default = "u8_enc")]
     pub value: ValueEncoding,
+    /// Constant bytes after the value (counted in `len`).
+    #[serde(default, deserialize_with = "hex_bytes")]
+    pub suffix: Vec<u8>,
 }
 
 /// How a feature reads a setting that holds both a switch and a level,
@@ -207,6 +210,11 @@ pub struct VendorBinding {
     pub status_value: ValueEncoding,
     /// Bits of the status byte holding the value (shifted down).
     pub status_mask: Option<u8>,
+    /// Maps the (masked) status value to the feature value, for settings
+    /// whose readback encoding differs from the write encoding. Values
+    /// without an entry read as unknown.
+    #[serde(default)]
+    pub status_map: Vec<[i64; 2]>,
     /// For toggles whose camera value is the opposite of the label (e.g.
     /// "Disable Microphone" is 1 while the microphone is enabled).
     #[serde(default)]
@@ -414,6 +422,28 @@ mod tests {
         );
         assert_eq!(short(FeatureId::Hdr, 1), [0x01, 0x01, 0x01, 0x00]);
         assert!(matches!(p.features[&FeatureId::AiLock], Binding::Lock(_)));
+    }
+
+    /// OBSBOT Center usbmon captures, Meet SE fw 4.6.4.1: `20 05 [on] [mode] 01 c8 00`.
+    #[test]
+    fn meet_se_auto_framing_matches_captures() {
+        use crate::protocol::{encode_short, encode_value};
+        let p = DeviceProfile::for_usb(0x3564, 0xfefe);
+        let Binding::Vendor(VendorBinding { short: Some(s), .. }) =
+            &p.features[&FeatureId::AutoFraming]
+        else {
+            panic!("auto_framing is a short setting")
+        };
+        let packet = |value: i64| {
+            let mut payload = s.prefix.clone();
+            payload.extend(encode_value(s.value, value, 1));
+            payload.extend(&s.suffix);
+            encode_short(s.id, &payload)[..7].to_vec()
+        };
+        assert_eq!(packet(256), [0x20, 5, 0x00, 0x01, 0x01, 0xc8, 0x00]); // off
+        assert_eq!(packet(1), [0x20, 5, 0x01, 0x00, 0x01, 0xc8, 0x00]); // group
+        assert_eq!(packet(513), [0x20, 5, 0x01, 0x02, 0x01, 0xc8, 0x00]); // upper body
+        assert_eq!(packet(257), [0x20, 5, 0x01, 0x01, 0x01, 0xc8, 0x00]); // single close-up
     }
 
     #[test]

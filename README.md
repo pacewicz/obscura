@@ -76,6 +76,8 @@ Status on the Tiny SE:
 | Area | Feature | Status |
 |---|---|---|
 | AI tracking | Human / Group / Hand Tracking modes | ✅ |
+| Auto Framing | Meet SE: Off / Group Mode / Upper Body / Single Close-up (the palm-up gesture and its Composition Mode), with readback | ✅ |
+| Field of View | Meet SE: Wide / Medium / Narrow, with readback (ignored while the camera sleeps) | ✅ |
 | Gesture control | Master switch, Locked Target, Zoom, Dynamic Zoom, Direction Flip, Zoom Factor (1–4×) | ✅ |
 | View & gimbal | Joystick (velocity control), speed, view reset | ✅ |
 | View & gimbal | Manual zoom (1–4×), View and Gimbal Reverse | ✅ |

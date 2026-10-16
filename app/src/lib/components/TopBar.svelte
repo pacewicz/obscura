@@ -43,6 +43,9 @@
             >
           {/snippet}
           <div class="pop">
+            {#if device.supported("auto_framing")}
+              <Feature id="auto_framing" description="Enter/Exit Auto Frame" />
+            {/if}
             <Feature id="gesture_control" />
             {#if device.on("gesture_control") || !device.supported("gesture_control")}
               <div class="sub">

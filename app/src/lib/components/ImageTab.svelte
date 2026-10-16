@@ -154,6 +154,7 @@
       <Joystick disabled={!gimbalSupported} onmove={joystick} onrelease={joystickRelease} />
     </div>
     <Feature id="zoom" />
+    <Feature id="fov" />
   </Card>
 
   <Card title="Image Adj.">

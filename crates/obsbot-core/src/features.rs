@@ -97,6 +97,7 @@ features! {
     GestureZoomFactor     "gesture_zoom_factor" => "gesture", "Zoom Factor", range(100, 400, 100, Some("x"));
     GestureDynamicZoom    "gesture_dynamic_zoom" => "gesture", "Dynamic Zoom", FeatureKind::Toggle;
     GestureDirectionFlip  "gesture_direction_flip" => "gesture", "Direction Flip", FeatureKind::Toggle;
+    AutoFraming           "auto_framing" => "gesture", "Auto Framing", choice(&[(256, "Off"), (1, "Group Mode"), (513, "Upper Body"), (257, "Single Close-up")]);
     MirrorImage           "mirror_image" => "header", "Mirror Image", FeatureKind::Toggle;
     Sleep                 "sleep" => "header", "Sleep", FeatureKind::Toggle;
 
@@ -109,6 +110,7 @@ features! {
     Pan                   "pan" => "gimbal", "Pan", range(-100, 100, 1, None);
     Tilt                  "tilt" => "gimbal", "Tilt", range(-100, 100, 1, None);
     Zoom                  "zoom" => "gimbal", "Manual Zoom", range(100, 400, 100, Some("x"));
+    Fov                   "fov" => "gimbal", "Field of View", choice(&[(0, "Wide"), (1, "Medium"), (2, "Narrow")]);
     GimbalReset           "gimbal_reset" => "gimbal", "Reset View", FeatureKind::Action;
     GimbalReverse         "gimbal_reverse" => "gimbal", "View and Gimbal Reverse", FeatureKind::Toggle;
 
