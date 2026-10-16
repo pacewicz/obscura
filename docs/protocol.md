@@ -52,7 +52,7 @@ later to read an `aa 29` response carrying the same cmd and a payload.
 | Gesture: Zoom Factor | dst 02 `4219` payload `02000000` + u32 (factor×100), then dst 04 `4432` f32 factor | `0468` → f32? (*unverified*) | 1.00–4.00 |
 | Gesture: Dynamic Zoom | dst 04 `4433` | ? (`0433` query was sent just before the camera hung) | u8 0/1 |
 | Gesture: Direction Flip | dst 04 `c433` | `8433` → u8 | u8 0/1 |
-| Auto Framing (Meet SE) | selector 6 short setting `20`, len 5: `[on, mode, 01, c8, 00]` | status[38] & 7 = on \| mode << 1 (0x8a Off, 0x89 Group, 0x8b Single Close-up, 0x8d Upper Body) | ✅ all four states written and read back from Linux; mode 0 Group, 1 Single Close-up, 2 Upper Body; bytes 2..4 constant |
+| Auto Framing, Composition Mode, gesture Zoom, Zoom Factor (Meet SE) | selector 6 short setting `20`, len 5: `[on, mode, zoom on, factor x100 u16 LE]`, one record for all four | status word at 38 (u16 LE): bit 0 on, bits 1-2 mode (0 Group, 1 Single Close-up, 2 Upper Body), bit 3 zoom on, bits 4-15 factor x100 | ✅ every field written and read back from Linux; a write reads the word, changes one field and sends the whole record |
 | Field of View (Meet SE) | selector 6 short setting `04`, len 1: 0, 1, 2 | status[4] & 3 (bit 2 = digital zoom active) | ✅ written and read back from Linux, 0 Wide, 1 Medium, 2 Narrow confirmed on the picture. Ignored while the camera sleeps (status[9] = 3) |
 | Digital crop (Meet SE) | selector 6 short setting `21`, len 16: u32 [x0, y0, x1, y1] in 1/10000 of the frame | status[4] bit 2 | seen in captures only: a 2.5x zoom is a crop 4000 wide |
 | Gesture Control (master) | the four switch frames above, same value | status[1] | |

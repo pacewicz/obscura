@@ -45,6 +45,7 @@
           <div class="pop">
             {#if device.supported("auto_framing")}
               <Feature id="auto_framing" description="Enter/Exit Auto Frame" />
+              <Feature id="composition_mode" />
             {/if}
             <Feature id="gesture_control" />
             {#if device.on("gesture_control") || !device.supported("gesture_control")}

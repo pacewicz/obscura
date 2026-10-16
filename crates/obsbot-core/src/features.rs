@@ -97,7 +97,8 @@ features! {
     GestureZoomFactor     "gesture_zoom_factor" => "gesture", "Zoom Factor", range(100, 400, 100, Some("x"));
     GestureDynamicZoom    "gesture_dynamic_zoom" => "gesture", "Dynamic Zoom", FeatureKind::Toggle;
     GestureDirectionFlip  "gesture_direction_flip" => "gesture", "Direction Flip", FeatureKind::Toggle;
-    AutoFraming           "auto_framing" => "gesture", "Auto Framing", choice(&[(256, "Off"), (1, "Group Mode"), (513, "Upper Body"), (257, "Single Close-up")]);
+    AutoFraming           "auto_framing" => "gesture", "Auto Framing", FeatureKind::Toggle;
+    CompositionMode       "composition_mode" => "gesture", "Composition Mode", choice(&[(0, "Group Mode"), (2, "Upper Body"), (1, "Single Close-up")]);
     MirrorImage           "mirror_image" => "header", "Mirror Image", FeatureKind::Toggle;
     Sleep                 "sleep" => "header", "Sleep", FeatureKind::Toggle;
 

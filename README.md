@@ -69,13 +69,15 @@ them rather than guessed. If something doesn't work, or you can capture
 one of these models' traffic, see
 [Adding support for another camera](#adding-support-for-another-camera).
 
-**Meet SE (firmware 4.6.4.1) so far:** Auto Framing (the palm-up gesture and
-its Composition Mode) and Field of View are captured from OBSBOT Center and
-verified with readback; waking the camera from sleep works; the Microphone Status During
-Sleep bytes match the capture. The Tiny SE gesture switches (Locked Target and
-the master switch) did not stop the palm gesture on the Meet SE, and manual
-zoom is unavailable (the app zooms with a digital crop that is not bound yet).
-Everything else still reuses the Tiny SE bindings and is unverified.
+**Meet SE (firmware 4.6.4.1) so far:** Auto Framing (the palm-up gesture), its
+Composition Mode, the gesture Zoom with its Zoom Factor, and Field of View are
+captured from OBSBOT Center and verified with readback; waking the camera
+from sleep works; the Microphone Status During Sleep bytes match the capture.
+The Tiny SE gesture switches (Locked Target, the master switch, Dynamic Zoom,
+Direction Flip) did not stop the palm gesture and the app has no such
+controls, so they are not bound. Manual zoom is unavailable (the app zooms
+with a digital crop that is not bound yet). Everything else still reuses the
+Tiny SE bindings and is unverified.
 
 ## Features
 
@@ -84,7 +86,7 @@ Status on the Tiny SE:
 | Area | Feature | Status |
 |---|---|---|
 | AI tracking | Human / Group / Hand Tracking modes | ✅ |
-| Auto Framing | Meet SE: Off / Group Mode / Upper Body / Single Close-up (the palm-up gesture and its Composition Mode), with readback | ✅ |
+| Auto Framing | Meet SE: on/off, Composition Mode (Group, Upper Body, Single Close-up) and the gesture Zoom with its Zoom Factor (1-4x), all with readback | ✅ |
 | Field of View | Meet SE: Wide / Medium / Narrow, with readback (ignored while the camera sleeps) | ✅ |
 | Gesture control | Master switch, Locked Target, Zoom, Dynamic Zoom, Direction Flip, Zoom Factor (1–4×) | ✅ |
 | View & gimbal | Joystick (velocity control), speed, view reset | ✅ |
